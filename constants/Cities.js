@@ -1,4 +1,6 @@
-export const CITIES = ['Beijing', 'Buenos Aires', 'Cairo', 'Chongqing',
+const CITIES = ['Beijing', 'Buenos Aires', 'Cairo', 'Chongqing',
   'Delhi', 'Dhaka', 'Istanbul', 'Karachi', 'Kolkata', 'Mexico City', 'Mumbai',
   'Osaka', 'Sao Paulo', 'Shangai', 'Tokyo'
-]
+];
+
+export default CITIES;
