@@ -1,24 +1,35 @@
-import React from "react";
+import React, {useState} from "react";
 import { FlatList, View, StyleSheet, Image, Pressable } from "react-native";
 import Icons from './Icons';
 import {Text} from './Text';
 import Layout from '../constants/Layout';
 import SearchBar from './SearchBar';
-import { boundSetDetailScreen } from '../redux/store';
+import { boundSetDetailScreen, boundRemoveFromList } from '../redux/store';
+import ToolTip from './ToolTip';
 
 
 export default function ListItem(props) {
 
+  const [longPress, setLongPress] = useState(false);
+
+  const onLongPress = () => {
+
+  };
   
-    const _renderItem = ({ item, index }) => (
+  const _renderItem = ({ item, index }) => (
+    <View>
       <Pressable
         key={item.Key}
         style={styles.item}
+        onLongPress={() => {
+          setLongPress(true);
+        }}
         onPress={() => {
           boundSetDetailScreen(index);
-          props.navigation.navigate('Details');
-        }}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+          props.navigation.navigate("Details");
+        }}
+      >
+        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
           <Text style={styles.text}>{item.LocalizedName}</Text>
           <Icons
             uri={`https://developer.accuweather.com/sites/default/files/${item.WeatherIcon}-s.png`}
@@ -27,11 +38,21 @@ export default function ListItem(props) {
         </View>
         <View>
           <Text
-            style={[styles.text, {textAlign: "center"}]}
+            style={[styles.text, { textAlign: "center" }]}
           >{`${item.Temperature.Metric.Value}°C`}</Text>
         </View>
+        {longPress ? 
+          (<ToolTip
+            index={index}
+            //addToFav={}
+            removeFromList={boundRemoveFromList}
+          />)
+          :
+      null    
+      }
       </Pressable>
-    );
+    </View>
+  );
   
   const _keyExtractor = (item, index) => item.key;
 

@@ -23,6 +23,7 @@ import { connect } from "react-redux";
 import AsyncStorage from '@react-native-community/async-storage';
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
+import ImageModal from '../components/ImageModal';
 
 function DetailWeatherScreen({ navigation, detail }) {
     const [note, setNote] = useState("");
@@ -36,6 +37,7 @@ function DetailWeatherScreen({ navigation, detail }) {
     const [isVisible, setVisible] = useState(false);
     const [permissionDenied, setPermissionDenied] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [imageModal, setImageModal] = useState(false);
     
     const getCameraPermissions = () => {
         if (!permission || permission.status !== 'granted') {
@@ -47,7 +49,9 @@ function DetailWeatherScreen({ navigation, detail }) {
         }
         setVisible(true);
     };
-
+    const showImageModal = () => {
+        setImageModal(true);
+    };
 
     const takePhoto = async () => {
         setIsLoading(true);
@@ -126,12 +130,14 @@ function DetailWeatherScreen({ navigation, detail }) {
               <CameraRoll />
                     </View>
                     <View>
-                        <TouchableOpacity>
-                            <View>
+                        {image ? (<TouchableOpacity
+                            onPress={showImageModal}>
+                            <View style={styles.pin}>
                                 <Pin />
-                                <Text>Put Cooridinates here</Text>
+                                <Text>Put Coordinates here</Text>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity>)
+                            : null}
                     </View>        
         </View>
         </ScrollView>
@@ -154,7 +160,8 @@ function DetailWeatherScreen({ navigation, detail }) {
               <CameraTrigger onPress={takePhoto} style={{ margin: 5 }} />
             )}
           </Camera>
-        </Modal>
+            </Modal>
+            <ImageModal visible={imageModal} uri={image.uri} />
       </View>
     );
 }
@@ -208,7 +215,16 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         flex: 1,
-  }
+    },
+    pin: {
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        elevation: 3,
+        borderRadius: 5,
+        width: Layout.DEVICE_WIDTH * 0.8,
+        marginVertical: 5
+    }
 });
 
 const mapStateToProps = ({ CitiesDetailIndex, weatherStateReducer }) => {

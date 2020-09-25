@@ -1,7 +1,8 @@
 import {
     WEATHER_OF_CITIES,
     FILTER_CITY,
-    SET_INDEX_OF_DETAILSCREEN
+    SET_INDEX_OF_DETAILSCREEN,
+    REMOVE_FROM_LIST
 } from './actions';
 
 import { combineReducers } from "redux";
@@ -22,7 +23,10 @@ export function weatherStateReducer(state = [], action) {
             else if (Array.isArray(newState)) {
                 return newState;
             }
-
+        case REMOVE_FROM_LIST:
+            let sieveState = [...state];
+            sieveState.splice(action.index, 1);
+            return sieveState;
         default:
             return state;
     }
