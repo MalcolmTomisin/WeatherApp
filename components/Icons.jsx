@@ -3,6 +3,7 @@ import { Image, TouchableOpacity } from "react-native";
 import ic_humidity from '../assets/icons/ic_humidity.png';
 import ic_wind from '../assets/icons/ic_wind.png';
 import ic_back from "../assets/icons/ic_back.png";
+import ic_camera from '../assets/icons/ic_camera.png';
 
 export default function WeatherIcons(props) {
     return <Image
@@ -33,5 +34,16 @@ export function BackButton(props) {
           style={[{ width: 25, height: 20 }, props.style]}
         />
       </TouchableOpacity>
+    );
+}
+
+export function CameraButton(props) {
+    return (
+        <TouchableOpacity onPress={props.onPress}>
+            <Image
+                source={ic_camera}
+                style={[{ width: 40, height: 40 }, props.style]}
+            />
+        </TouchableOpacity>
     );
 }

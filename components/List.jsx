@@ -12,7 +12,7 @@ export default function ListItem(props) {
   
     const _renderItem = ({ item, index }) => (
       <Pressable
-        key={item.key}
+        key={item.Key}
         style={styles.item}
         onPress={() => {
           boundSetDetailScreen(index);

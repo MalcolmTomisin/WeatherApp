@@ -30,7 +30,7 @@ function CitiesWeatherScreen({ weatherList, navigation }) {
      }
      //const resList = res.result;
     
-     //console.log('this', res.result);
+     console.log('this', res.result);
     return (
       <View style={{ flex: 1 , justifyContent: 'center', alignItems: 'center'}}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />

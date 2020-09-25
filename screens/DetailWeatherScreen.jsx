@@ -11,9 +11,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 function DetailWeatherScreen({ navigation, detail }) {
     const [note, setNote] = useState("");
 
-    useEffect(async () => {
-        let text = await AsyncStorage.getItem(detail.Key);
-        setNote(text);
+    useEffect(() => {
+        (async () => {
+            let text = await AsyncStorage.getItem(detail.Key);
+            setNote(text);
+        })();
     }, []);
     
     const onChangeText = (text) => setNote(text);
@@ -44,7 +46,7 @@ function DetailWeatherScreen({ navigation, detail }) {
                     <Text style={styles.seaLevel}>{`${detail.WeatherText}`}</Text>
           </View>
             </View>
-            <View>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <TextInput
                     multiline
                     value={note}
@@ -87,11 +89,15 @@ const styles = StyleSheet.create({
     //fontFamily: "SF UI Display",
     fontSize: 28,
     fontWeight: "700",
-    },
-    noteArea: {
-        width: Layout.DEVICE_WIDTH,
-        height: DEVICE_HEIGHT * 0.5,
-  }
+  },
+  noteArea: {
+    width: Layout.DEVICE_WIDTH * 0.9,
+    height: Layout.DEVICE_HEIGHT * 0.5,
+    elevation: 3,
+    padding: 20,
+      textAlignVertical: "top",
+    fontSize: 18,
+  },
 });
 
 const mapStateToProps = ({ CitiesDetailIndex, weatherStateReducer }) => {
