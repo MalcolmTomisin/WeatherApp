@@ -1,20 +1,58 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect, useRef} from 'react';
 import {
-    View, StyleSheet, StatusBar, TextInput
+    View,
+    StyleSheet,
+    StatusBar,
+    TextInput,
+    Modal
 } from 'react-native';
 import Layout from '../constants/Layout';
 import {Text} from '../components/Text';
-import WeatherIcons,{ BackButton } from '../components/Icons';
+import WeatherIcons, {
+    BackButton,
+    CameraButton,
+    CameraRoll
+} from '../components/Icons';
 import { connect } from "react-redux";
 import AsyncStorage from '@react-native-community/async-storage';
+import { Camera } from "expo-camera";
+import * as Permissions from "expo-permissions";
 
 function DetailWeatherScreen({ navigation, detail }) {
     const [note, setNote] = useState("");
+    const [permission, askForPermission] = usePermissions(Permissions.CAMERA, {
+      ask: true,
+    });
+    const [ready, setReady] = useState(false);
+    const [cameraError, setCameraError] = useState();
+    const camera = useRef(null);
+    
+    const getCameraPermissions = () => {
+        if (!permission || permission.status !== 'granted') {
+            askForPermission();
+        }
+    };
+
+    const takePhoto = () => {
+
+    };
+    const signalCameraReady = () => {
+        setReady(true);
+    };
+    const signalCameraError = e => {
+        setCameraError(e.message);
+    };
 
     useEffect(() => {
         (async () => {
-            let text = await AsyncStorage.getItem(detail.Key);
-            setNote(text);
+            try {
+                let text = await AsyncStorage.getItem(detail.Key);
+                setNote(text);
+            }
+            catch (e) {
+                //handle error
+            }
+            
         })();
     }, []);
     
@@ -54,7 +92,21 @@ function DetailWeatherScreen({ navigation, detail }) {
                     onEndEditing={onEndEditing}
                     style={styles.noteArea}
                 />
+                <View style={styles.buttonContainer}>
+                    <CameraButton />
+                    <CameraRoll />
+                </View>
             </View>
+            <Modal style={{flex: 1}}>
+                <Camera
+                    style={{ flex: 1 }}
+                    onCameraReady={signalCameraReady}
+                    flashMode="auto"
+                    autoFocus={Camera.Constants.AutoFocus}
+                    onMountError={signalCameraError}
+                    ref={camera}
+                ></Camera>
+            </Modal>
       </View>
     );
 }
@@ -95,8 +147,13 @@ const styles = StyleSheet.create({
     height: Layout.DEVICE_HEIGHT * 0.5,
     elevation: 3,
     padding: 20,
-      textAlignVertical: "top",
+    textAlignVertical: "top",
     fontSize: 18,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+      justifyContent: "space-evenly",
+    padding: 10,
   },
 });
 

@@ -4,6 +4,8 @@ import ic_humidity from '../assets/icons/ic_humidity.png';
 import ic_wind from '../assets/icons/ic_wind.png';
 import ic_back from "../assets/icons/ic_back.png";
 import ic_camera from '../assets/icons/ic_camera.png';
+import ic_roll from '../assets/icons/ic_camera_roll.png';
+import ic_take_photo from '../assets/icons/ic_take_picture.png';
 
 export default function WeatherIcons(props) {
     return <Image
@@ -45,5 +47,27 @@ export function CameraButton(props) {
                 style={[{ width: 40, height: 40 }, props.style]}
             />
         </TouchableOpacity>
+    );
+}
+
+export function CameraRoll(props) {
+    return (
+      <TouchableOpacity onPress={props.onPress}>
+        <Image
+          source={ic_roll}
+          style={[{ width: 40, height: 40 }, props.style]}
+        />
+      </TouchableOpacity>
+    );
+}
+
+export function CameraTrigger(props) {
+    return (
+      <TouchableOpacity onPress={props.onPress}>
+        <Image
+          source={ic_take_photo}
+          style={[{ width: 40, height: 40 }, props.style]}
+        />
+      </TouchableOpacity>
     );
 }
