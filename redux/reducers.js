@@ -1,4 +1,10 @@
-import { WEATHER_OF_CITIES, FILTER_CITY } from './actions';
+import {
+    WEATHER_OF_CITIES,
+    FILTER_CITY,
+    SET_INDEX_OF_DETAILSCREEN
+} from './actions';
+
+import { combineReducers } from "redux";
 
 export function weatherStateReducer(state = [], action) {
     switch (action.type) {
@@ -22,3 +28,17 @@ export function weatherStateReducer(state = [], action) {
     }
 }
 
+export function CitiesDetailIndex(state = 0, action) {
+    switch (action.type) {
+        case SET_INDEX_OF_DETAILSCREEN:
+            return action.index;
+        default:
+            return state;
+    }
+}
+
+const GlobalState = combineReducers({
+    weatherStateReducer, CitiesDetailIndex
+});
+
+export default GlobalState;

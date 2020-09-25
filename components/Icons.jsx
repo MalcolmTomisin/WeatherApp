@@ -1,7 +1,8 @@
 import React from "react";
-import { Image } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import ic_humidity from '../assets/icons/ic_humidity.png';
 import ic_wind from '../assets/icons/ic_wind.png';
+import ic_back from "../assets/icons/ic_back.png";
 
 export default function WeatherIcons(props) {
     return <Image
@@ -22,4 +23,15 @@ export function WindIcon() {
         source={ic_wind}
         style={{ width: 21, height: 16 }}
     />;
+}
+
+export function BackButton(props) {
+    return (
+      <TouchableOpacity onPress={props.onPress}>
+        <Image
+          source={ic_back}
+          style={[{ width: 16, height: 16 }, props.style]}
+        />
+      </TouchableOpacity>
+    );
 }
