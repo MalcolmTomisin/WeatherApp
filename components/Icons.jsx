@@ -6,6 +6,7 @@ import ic_back from "../assets/icons/ic_back.png";
 import ic_camera from '../assets/icons/ic_camera.png';
 import ic_roll from '../assets/icons/ic_camera_roll.png';
 import ic_take_photo from '../assets/icons/ic_take_picture.png';
+import ic_pin from '../assets/icons/ic_pin.png';
 
 export default function WeatherIcons(props) {
     return <Image
@@ -69,5 +70,13 @@ export function CameraTrigger(props) {
           style={[{ width: 40, height: 40 }, props.style]}
         />
       </TouchableOpacity>
+    );
+}
+
+export function Pin(props) {
+    return (
+        <Image source={ic_pin}
+            style={[{ width: 20, height: 20 }, props.style]}
+        />
     );
 }

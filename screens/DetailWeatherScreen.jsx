@@ -4,14 +4,20 @@ import {
     StyleSheet,
     StatusBar,
     TextInput,
-    Modal
+    Modal,
+    ActivityIndicator,
+    ScrollView,
+    Image,
+    TouchableOpacity
 } from 'react-native';
 import Layout from '../constants/Layout';
 import {Text} from '../components/Text';
 import WeatherIcons, {
     BackButton,
     CameraButton,
-    CameraRoll
+    CameraRoll,
+    CameraTrigger,
+    Pin
 } from '../components/Icons';
 import { connect } from "react-redux";
 import AsyncStorage from '@react-native-community/async-storage';
@@ -20,21 +26,37 @@ import * as Permissions from "expo-permissions";
 
 function DetailWeatherScreen({ navigation, detail }) {
     const [note, setNote] = useState("");
-    const [permission, askForPermission] = usePermissions(Permissions.CAMERA, {
+    const [permission, askForPermission] = Permissions.usePermissions(Permissions.CAMERA, {
       ask: true,
     });
     const [ready, setReady] = useState(false);
     const [cameraError, setCameraError] = useState();
     const camera = useRef(null);
+    const [image, setImage] = useState(null);
+    const [isVisible, setVisible] = useState(false);
+    const [permissionDenied, setPermissionDenied] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     
     const getCameraPermissions = () => {
         if (!permission || permission.status !== 'granted') {
             askForPermission();
+            if (!permission || permission.status !== 'granted') {
+                setPermissionDenied(true);
+                return;
+            }
         }
+        setVisible(true);
     };
 
-    const takePhoto = () => {
 
+    const takePhoto = async () => {
+        setIsLoading(true);
+        let photo = await camera.current.takePictureAsync({
+            quality: 0
+        });
+        setImage(photo);
+        setIsLoading(false);
+        setVisible(false);
     };
     const signalCameraReady = () => {
         setReady(true);
@@ -75,38 +97,64 @@ function DetailWeatherScreen({ navigation, detail }) {
             />
           </View>
           <View
-            style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: 'center' }}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+            }}
           >
             <Text
               style={styles.temperature}
             >{`${detail.Temperature.Metric.Value}°C`}</Text>
-                    <Text style={styles.seaLevel}>{`${detail.GeoPosition.Elevation.Metric.Value} m`}</Text>
-                    <Text style={styles.seaLevel}>{`${detail.WeatherText}`}</Text>
+            <Text
+              style={styles.seaLevel}
+            >{`${detail.GeoPosition.Elevation.Metric.Value} m`}</Text>
+            <Text style={styles.seaLevel}>{`${detail.WeatherText}`}</Text>
           </View>
-            </View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <TextInput
-                    multiline
-                    value={note}
-                    onChangeText={onChangeText}
-                    onEndEditing={onEndEditing}
-                    style={styles.noteArea}
-                />
-                <View style={styles.buttonContainer}>
-                    <CameraButton />
-                    <CameraRoll />
-                </View>
-            </View>
-            <Modal style={{flex: 1}}>
-                <Camera
-                    style={{ flex: 1 }}
-                    onCameraReady={signalCameraReady}
-                    flashMode="auto"
-                    autoFocus={Camera.Constants.AutoFocus}
-                    onMountError={signalCameraError}
-                    ref={camera}
-                ></Camera>
-            </Modal>
+        </View>
+        <ScrollView>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <TextInput
+              multiline
+              value={note}
+              onChangeText={onChangeText}
+              onEndEditing={onEndEditing}
+              style={styles.noteArea}
+            />
+            <View style={styles.buttonContainer}>
+              <CameraButton onPress={getCameraPermissions} />
+              <CameraRoll />
+                    </View>
+                    <View>
+                        <TouchableOpacity>
+                            <View>
+                                <Pin />
+                                <Text>Put Cooridinates here</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>        
+        </View>
+        </ScrollView>
+        <Modal style={{ flex: 1 }} visible={isVisible}>
+          <Camera
+            style={styles.camera}
+            onCameraReady={signalCameraReady}
+            flashMode="auto"
+            autoFocus={Camera.Constants.AutoFocus.on}
+            onMountError={signalCameraError}
+            ref={camera}
+          >
+            {isLoading ? (
+              <ActivityIndicator
+                color="#0090ffc2"
+                size="small"
+                style={{ margin: 5 }}
+              />
+            ) : (
+              <CameraTrigger onPress={takePhoto} style={{ margin: 5 }} />
+            )}
+          </Camera>
+        </Modal>
       </View>
     );
 }
@@ -153,8 +201,14 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
       justifyContent: "space-evenly",
-    padding: 10,
-  },
+      padding: 10,
+    width: Layout.DEVICE_WIDTH
+    },
+    camera: {
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        flex: 1,
+  }
 });
 
 const mapStateToProps = ({ CitiesDetailIndex, weatherStateReducer }) => {
