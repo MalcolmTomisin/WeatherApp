@@ -7,7 +7,7 @@ import WEATHER_URL from '../constants/Strings';
 import { boundGetWeatherDetails, boundFilterCities } from '../redux/store';
 import { connect } from "react-redux";
 
-function CitiesWeatherScreen({ weatherList }) {
+function CitiesWeatherScreen({ weatherList, navigation }) {
      
     const [input, setInput] = useState("");
 
@@ -34,14 +34,19 @@ function CitiesWeatherScreen({ weatherList }) {
     return (
       <View style={{ flex: 1 , justifyContent: 'center', alignItems: 'center'}}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
-        <ListItem data={weatherList} onChangeText={recieveInput} value={input} />
+            <ListItem
+                data={weatherList}
+                onChangeText={recieveInput}
+                value={input}
+                navigation={navigation}
+            />
       </View>
     );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({weatherStateReducer}) => {
   //console.log("state", state);
-  return { weatherList: state };
+  return { weatherList: weatherStateReducer };
 };
 
 export default connect(mapStateToProps, {

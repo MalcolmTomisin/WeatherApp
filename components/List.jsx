@@ -4,11 +4,20 @@ import Icons from './Icons';
 import {Text} from './Text';
 import Layout from '../constants/Layout';
 import SearchBar from './SearchBar';
+import { boundSetDetailScreen } from '../redux/store';
 
 
-export default function ListItem (props) {
-    const _renderItem = ({ item }) => (
-      <Pressable key={item.key} style={styles.item}>
+export default function ListItem(props) {
+
+  
+    const _renderItem = ({ item, index }) => (
+      <Pressable
+        key={item.key}
+        style={styles.item}
+        onPress={() => {
+          boundSetDetailScreen(index);
+          props.navigation.navigate('Details');
+        }}>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <Text style={styles.text}>{item.LocalizedName}</Text>
           <Icons

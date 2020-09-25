@@ -30,7 +30,7 @@ export function BackButton(props) {
       <TouchableOpacity onPress={props.onPress}>
         <Image
           source={ic_back}
-          style={[{ width: 16, height: 16 }, props.style]}
+          style={[{ width: 25, height: 20 }, props.style]}
         />
       </TouchableOpacity>
     );
