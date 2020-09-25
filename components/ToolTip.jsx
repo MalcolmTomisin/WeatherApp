@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 export default function ToolTip(props) {
     const addToFavourites = () => {
@@ -10,9 +10,13 @@ export default function ToolTip(props) {
     };
     return (
       <View style={props.style}>
-        <Text style={styles.action} onPress={addToFavourites}>Favourite</Text>
+        <TouchableOpacity onPress={addToFavourites}>
+          <Text style={styles.action}>Favourite</Text>
+        </TouchableOpacity>
         <View style={styles.line}></View>
-        <Text style={styles.action} onPress={removeFromList}>Remove</Text>
+        <TouchableOpacity onPress={removeFromList}>
+          <Text style={styles.action}>Remove</Text>
+        </TouchableOpacity>
       </View>
     );
 }
@@ -24,7 +28,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#95989a",
   },
   action: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "400",
       color: "#95989a",
   },

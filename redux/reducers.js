@@ -5,6 +5,7 @@ import {
     REMOVE_FROM_LIST,
     ADD_TO_FAVOURITES,
 } from './actions';
+import SortCities from '../util/SortCities';
 
 import { combineReducers } from "redux";
 
@@ -29,8 +30,17 @@ export function weatherStateReducer(state = [], action) {
             sieveState.splice(action.index, 1);
             return sieveState;
         case ADD_TO_FAVOURITES:
+            if (typeof state[action.index].favorite !== 'undefined') {
+                return state;
+            }
             let favState = state.splice(action.index, 1);
-            state.unshift(...favState);
+            favState[0].favorite = true;
+            if (action.numberOfFavs === 1) {
+                state.unshift(...favState);
+                return state;
+            }
+            let topFavs = state.splice(0, action.numberOfFavs - 1);
+            state.unshift(...[...topFavs, ...favState].sort(SortCities));
             return state;
         default:
             return state;

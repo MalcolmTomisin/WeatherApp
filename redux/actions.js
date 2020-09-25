@@ -32,9 +32,11 @@ export function removeFromList(index) {
     };
 }
 
-export function addToFavourites(index) {
+export function addToFavourites(index, numberOfFavs) {
     return {
         type: ADD_TO_FAVOURITES,
-        index
+        index,
+        favorite: true,
+        numberOfFavs
     };
 }

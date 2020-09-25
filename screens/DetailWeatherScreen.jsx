@@ -161,7 +161,7 @@ function DetailWeatherScreen({ navigation, detail }) {
             )}
           </Camera>
             </Modal>
-            <ImageModal visible={imageModal} uri={image.uri} />
+            {/* <ImageModal visible={imageModal} uri={!image.uri ? "" : image.uri} /> */}
       </View>
     );
 }

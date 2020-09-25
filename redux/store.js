@@ -20,7 +20,7 @@ export const boundRemoveFromList = (index) => {
     StorageUtil(removedIndex, index);  
     store.dispatch(removeFromList(index));
 };
-export const boundAddToFavourites = (index) => {
-    StorageUtil(favouriteIndex, index);
-    store.dispatch(addToFavourites(index));
+export const boundAddToFavourites = async (index) => {
+    let numOfFavs = await StorageUtil(favouriteIndex, index);
+    store.dispatch(addToFavourites(index, numOfFavs));
 };

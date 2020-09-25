@@ -15,6 +15,17 @@ import ToolTip from './ToolTip';
 export default function ListItem(props) {
 
   const [longPress, setLongPress] = useState(false);
+  const [itemIndex, setItemIndex] = useState();
+
+  const add = (index) => {
+    boundAddToFavourites(index);
+    setLongPress(false);
+  };
+
+  const remove = (remove) => {
+    boundRemoveFromList(index);
+    setLongPress(false);
+  };
   
   const _renderItem = ({ item, index }) => (
     <View>
@@ -23,6 +34,7 @@ export default function ListItem(props) {
         style={styles.item}
         onLongPress={() => {
           setLongPress(true);
+          setItemIndex(index);
         }}
         onPress={() => {
           boundSetDetailScreen(index);
@@ -41,11 +53,12 @@ export default function ListItem(props) {
             style={[styles.text, { textAlign: "center" }]}
           >{`${item.Temperature.Metric.Value}°C`}</Text>
         </View>
-        {longPress ? 
+        {longPress && itemIndex === index ? 
           (<ToolTip
             index={index}
-            addToFav={boundAddToFavourites}
-            removeFromList={boundRemoveFromList}
+            addToFav={add}
+            removeFromList={remove}
+            style={styles.toolTip}
           />)
           :
       null    
@@ -54,7 +67,7 @@ export default function ListItem(props) {
     </View>
   );
   
-  const _keyExtractor = (item, index) => item.key;
+  const _keyExtractor = (item, index) => item.Key;
 
   return (
     <FlatList
@@ -80,4 +93,17 @@ const styles = StyleSheet.create({
     // fontFamily: "SF UI Display",
     fontSize: 22,
   },
+  toolTip: {
+    backgroundColor: "white",
+    padding: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    borderRadius: 5,
+    height: 100,
+    zIndex: 10,
+    elevation: 4
+  }
 });
