@@ -4,10 +4,19 @@ import { useStorage } from '../hooks/useStorage';
 import ListItem from '../components/List';
 import { View, FlatList, Text, StatusBar, ActivityIndicator } from "react-native";
 import WEATHER_URL from '../constants/Strings'; 
-import { boundGetWeatherDetails } from '../redux/store';
+import { boundGetWeatherDetails, boundFilterCities } from '../redux/store';
 import { connect } from "react-redux";
 
- function CitiesWeatherScreen({weatherList}) {
+function CitiesWeatherScreen({ weatherList }) {
+     
+    const [input, setInput] = useState("");
+
+
+    const recieveInput = (text) => {
+       
+        boundFilterCities(text);
+        setInput(text);
+    };
     
      let res = useFetch(WEATHER_URL);
      if (res.loading) {
@@ -19,13 +28,13 @@ import { connect } from "react-redux";
            </View>
          );
      }
-     //const weatherList = res.result;
-
+     //const resList = res.result;
+    
      //console.log('this', res.result);
     return (
       <View style={{ flex: 1 , justifyContent: 'center', alignItems: 'center'}}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
-        <ListItem data={weatherList} />
+        <ListItem data={weatherList} onChangeText={recieveInput} value={input} />
       </View>
     );
 }
@@ -36,5 +45,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-    boundGetWeatherDetails,
+    boundGetWeatherDetails,boundFilterCities
 })(CitiesWeatherScreen);

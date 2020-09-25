@@ -3,6 +3,7 @@ import { FlatList, View, StyleSheet, Image, Pressable } from "react-native";
 import Icons from './Icons';
 import {Text} from './Text';
 import Layout from '../constants/Layout';
+import SearchBar from './SearchBar';
 
 
 export default function ListItem (props) {
@@ -30,6 +31,7 @@ export default function ListItem (props) {
       data={props.data}
       keyExtractor={_keyExtractor}
       renderItem={_renderItem}
+      ListHeaderComponent={<SearchBar {...props} />}
     />
   );
 
