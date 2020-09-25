@@ -4,17 +4,17 @@ import Icons from './Icons';
 import {Text} from './Text';
 import Layout from '../constants/Layout';
 import SearchBar from './SearchBar';
-import { boundSetDetailScreen, boundRemoveFromList } from '../redux/store';
+import {
+  boundSetDetailScreen,
+  boundRemoveFromList,
+  boundAddToFavourites
+} from '../redux/store';
 import ToolTip from './ToolTip';
 
 
 export default function ListItem(props) {
 
   const [longPress, setLongPress] = useState(false);
-
-  const onLongPress = () => {
-
-  };
   
   const _renderItem = ({ item, index }) => (
     <View>
@@ -44,7 +44,7 @@ export default function ListItem(props) {
         {longPress ? 
           (<ToolTip
             index={index}
-            //addToFav={}
+            addToFav={boundAddToFavourites}
             removeFromList={boundRemoveFromList}
           />)
           :

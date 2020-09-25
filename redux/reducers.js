@@ -2,7 +2,8 @@ import {
     WEATHER_OF_CITIES,
     FILTER_CITY,
     SET_INDEX_OF_DETAILSCREEN,
-    REMOVE_FROM_LIST
+    REMOVE_FROM_LIST,
+    ADD_TO_FAVOURITES,
 } from './actions';
 
 import { combineReducers } from "redux";
@@ -27,6 +28,10 @@ export function weatherStateReducer(state = [], action) {
             let sieveState = [...state];
             sieveState.splice(action.index, 1);
             return sieveState;
+        case ADD_TO_FAVOURITES:
+            let favState = state.splice(action.index, 1);
+            state.unshift(...favState);
+            return state;
         default:
             return state;
     }

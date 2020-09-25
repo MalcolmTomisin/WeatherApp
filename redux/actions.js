@@ -2,6 +2,7 @@ export const WEATHER_OF_CITIES = 'WEATHER OF CITIES';
 export const FILTER_CITY = 'FILTER CITY';
 export const SET_INDEX_OF_DETAILSCREEN = 'INDEX';
 export const REMOVE_FROM_LIST = 'REMOVE_INDEX';
+export const ADD_TO_FAVOURITES = 'ADD_TO_FAVS';
 
 export function getWeatherDetails(item) {
     return {
@@ -27,6 +28,13 @@ export function setDetailScreen(index) {
 export function removeFromList(index) {
     return {
         type: REMOVE_FROM_LIST,
+        index
+    };
+}
+
+export function addToFavourites(index) {
+    return {
+        type: ADD_TO_FAVOURITES,
         index
     };
 }

@@ -4,10 +4,11 @@ import {
     getWeatherDetails,
     filterCities,
     setDetailScreen,
-    removeFromList
+    removeFromList,
+    addToFavourites
 } from './actions';
-import { removedIndex } from '../constants/Strings';
-import AsyncStorage from '@react-native-community/async-storage';
+import { removedIndex, favouriteIndex } from '../constants/Strings';
+import StorageUtil from '../util/StorageUtil';
 const store = createStore(GlobalState);
 
 export default store;
@@ -15,23 +16,11 @@ export default store;
 export const boundGetWeatherDetails = (list) => store.dispatch(getWeatherDetails(list));
 export const boundFilterCities = (city) => store.dispatch(filterCities(city));
 export const boundSetDetailScreen = (index) => store.dispatch(setDetailScreen(index));
-export const boundRemoveFromList = async (index) => {
-    let stringDeletedList = await AsyncStorage.getItem(removedIndex);
-    let deletedList = JSON.parse(stringDeletedList);
-    if (Array.isArray(deletedList)) {
-        try {
-            deletedList.push(index);
-            AsyncStorage.setItem(removedIndex, JSON.stringify(deletedList));
-        }
-        catch (e) {
-            
-        }
-    }
-    else {
-        try {
-            AsyncStorage.setItem(removedIndex, JSON.stringify([index]));
-        }
-        catch (e) { }
-    }
+export const boundRemoveFromList = (index) => {
+    StorageUtil(removedIndex, index);  
     store.dispatch(removeFromList(index));
+};
+export const boundAddToFavourites = (index) => {
+    StorageUtil(favouriteIndex, index);
+    store.dispatch(addToFavourites(index));
 };
