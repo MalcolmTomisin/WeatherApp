@@ -30,6 +30,9 @@ export function weatherStateReducer(state = [], action) {
             sieveState.splice(action.index, 1);
             return sieveState;
         case ADD_TO_FAVOURITES:
+            /* case for adding cities to favourites and sorting alphabetically  */
+            
+            //already a fav
             if (typeof state[action.index].favorite !== 'undefined') {
                 return state;
             }

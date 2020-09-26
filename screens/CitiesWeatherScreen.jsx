@@ -25,7 +25,7 @@ function CitiesWeatherScreen({ weatherList, navigation }) {
               setErrorMsg("Permission to access location was denied");
             }
             let location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.High});
-            fetch(`${OPEN_WEATHER_URL}lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=${API_KEY_OPENWEATHERMAP}`)
+          fetch(`${OPEN_WEATHER_URL}lat=${location.coords.latitude}&lon=${location.coords.longitude}&units=metric&appid=${API_KEY_OPENWEATHERMAP}`)
                 .then(res => res.json())
                 .then(res => {
                     setData(res);

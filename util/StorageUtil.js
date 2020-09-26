@@ -1,3 +1,5 @@
+//cache list of index favourite/removed by user
+
 import AsyncStorage from '@react-native-community/async-storage';
 import { favouriteIndex } from "../constants/Strings";
 const ONLY_ONE_FAVOURITE_ITEM = 1;
