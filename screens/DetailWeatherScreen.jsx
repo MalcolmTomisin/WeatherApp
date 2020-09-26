@@ -90,7 +90,9 @@ function DetailWeatherScreen({ navigation, detail }) {
     };
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar backgroundColor="#0090ffc2" barStyle="light-content" />
+        <StatusBar
+          backgroundColor="#0090ffc2"
+          barStyle="light-content" />
         <View style={styles.topHalfScreen}>
           <BackButton onPress={() => navigation.goBack()} />
           <View style={styles.bold}>
@@ -157,11 +159,13 @@ function DetailWeatherScreen({ navigation, detail }) {
                 style={{ margin: 5 }}
               />
             ) : (
-              <CameraTrigger onPress={takePhoto} style={{ margin: 5 }} />
+                <CameraTrigger
+                  onPress={takePhoto} style={{ margin: 5 }} />
             )}
           </Camera>
             </Modal>
-            {/* <ImageModal visible={imageModal} uri={!image.uri ? "" : image.uri} /> */}
+        {
+          image.uri && <ImageModal visible={imageModal} uri={image.uri} />}
       </View>
     );
 }
@@ -207,24 +211,29 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-      justifyContent: "space-evenly",
-      padding: 10,
-    width: Layout.DEVICE_WIDTH
-    },
-    camera: {
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        flex: 1,
-    },
-    pin: {
-        padding: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        elevation: 3,
-        borderRadius: 5,
-        width: Layout.DEVICE_WIDTH * 0.8,
-        marginVertical: 5
-    }
+    justifyContent: "space-evenly",
+    padding: 10,
+    width: Layout.DEVICE_WIDTH,
+  },
+  camera: {
+    justifyContent: "flex-end",
+    alignItems: "center",
+    flex: 1,
+  },
+  pin: {
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    elevation: 3,
+    borderRadius: 5,
+    width: Layout.DEVICE_WIDTH * 0.8,
+    marginVertical: 5,
+  },
+  weatherDetailContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
 });
 
 const mapStateToProps = ({ CitiesDetailIndex, weatherStateReducer }) => {

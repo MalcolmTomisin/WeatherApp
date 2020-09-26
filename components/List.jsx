@@ -41,7 +41,7 @@ export default function ListItem(props) {
           props.navigation.navigate("Details");
         }}
       >
-        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+        <View style={styles.iconContainer}>
           <Text style={styles.text}>{item.LocalizedName}</Text>
           <Icons
             uri={`https://developer.accuweather.com/sites/default/files/${item.WeatherIcon}-s.png`}
@@ -53,6 +53,7 @@ export default function ListItem(props) {
             style={[styles.text, { textAlign: "center" }]}
           >{`${item.Temperature.Metric.Value}°C`}</Text>
         </View>
+        
         {longPress && itemIndex === index ? 
           (<ToolTip
             index={index}
@@ -96,14 +97,18 @@ const styles = StyleSheet.create({
   toolTip: {
     backgroundColor: "white",
     padding: 10,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    position: 'absolute',
+    justifyContent: "space-between",
+    alignItems: "center",
+    position: "absolute",
     right: 10,
     top: 10,
     borderRadius: 5,
     height: 100,
     zIndex: 10,
-    elevation: 4
-  }
+    elevation: 4,
+  },
+  iconContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
 });
