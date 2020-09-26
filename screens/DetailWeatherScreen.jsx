@@ -1,4 +1,4 @@
-import React,{useState, useEffect, useRef} from 'react';
+import React,{useState, useEffect} from 'react';
 import {
     View,
     StyleSheet,
@@ -8,9 +8,11 @@ import {
     ActivityIndicator,
     ScrollView,
     Image,
-    TouchableOpacity
+  TouchableOpacity,
+    Alert
 } from 'react-native';
 import Layout from '../constants/Layout';
+import {REJECTED_PERMISSION_PROMPT} from '../constants/Strings';
 import {Text} from '../components/Text';
 import WeatherIcons, {
     BackButton,
@@ -21,78 +23,117 @@ import WeatherIcons, {
 } from '../components/Icons';
 import { connect } from "react-redux";
 import AsyncStorage from '@react-native-community/async-storage';
-import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 import ImageModal from '../components/ImageModal';
+import * as Location from "expo-location";
 
 function DetailWeatherScreen({ navigation, detail }) {
     const [note, setNote] = useState("");
-    const [permission, askForPermission] = Permissions.usePermissions(Permissions.CAMERA, {
+    const [permission, askForPermission] = Permissions.usePermissions([Permissions.CAMERA, Permissions.CAMERA_ROLL], {
       ask: true,
     });
-    const [ready, setReady] = useState(false);
-    const [cameraError, setCameraError] = useState();
-    const camera = useRef(null);
-    const [image, setImage] = useState(null);
-    const [isVisible, setVisible] = useState(false);
+  const [image, setImage] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const [location, setLocation] = useState(null);
     const [permissionDenied, setPermissionDenied] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [imageModal, setImageModal] = useState(false);
+    const imageConfig = {
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    };
     
-    const getCameraPermissions = () => {
-        if (!permission || permission.status !== 'granted') {
-            askForPermission();
-            if (!permission || permission.status !== 'granted') {
-                setPermissionDenied(true);
-                return;
-            }
-        }
-        setVisible(true);
-    };
-    const showImageModal = () => {
-        setImageModal(true);
-    };
-
-    const takePhoto = async () => {
-        setIsLoading(true);
-        let photo = await camera.current.takePictureAsync({
-            quality: 0
-        });
-        setImage(photo);
-        setIsLoading(false);
-        setVisible(false);
-    };
-    const signalCameraReady = () => {
-        setReady(true);
-    };
-    const signalCameraError = e => {
-        setCameraError(e.message);
-    };
 
     useEffect(() => {
-        (async () => {
+      (async () => {
+          const {
+            status,
+        } = await ImagePicker.requestCameraRollPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert(REJECTED_PERMISSION_PROMPT);
+        }
             try {
-                let text = await AsyncStorage.getItem(detail.Key);
-                setNote(text);
+              let text = await AsyncStorage.getItem(detail.Key);
+              AsyncStorage.multiGet([detail.Key, "coordinates", "image"],
+                (err, stores) => {
+                  stores.map((result, i, store) => {
+                    if (i === 0) {
+                      setNote(result);
+                    } else if (i === 1) {
+                      setLocation(JSON.parse(result));
+                    }
+                    else {
+                      setImage(result);
+                    }
+                  });
+                });
             }
             catch (e) {
                 //handle error
-            }
-            
+            }   
         })();
     }, []);
+  
+  const getCameraPermissions = () => {
+    if (!permission || permission.status !== "granted") {
+      askForPermission();
+      if (!permission || permission.status !== "granted") {
+        setPermissionDenied(true);
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const takePhoto = async () => {
+    let granted = getCameraPermissions();
+    if (granted) {
+      let result = ImagePicker.launchCameraAsync(imageConfig);
+      if (!result.cancelled) {
+        setImage(result.uri);
+        let location = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.High,
+        });
+        const imageName = `${new Date().now()}`;
+        setLocation(location);
+        await FileSystem.makeDirectoryAsync(
+          FileSystem.documentDirectory + "images/"
+        );
+        await FileSystem.copyAsync({
+          from: result.uri,
+          to: FileSystem.documentDirectory + `images/${imageName}.png`
+        });
+        AsyncStorage.multiSet([
+          ["coordinates", JSON.stringify(location)],
+          ["image", FileSystem.documentDirectory + `images/${imageName}.png`],
+        ]);
+      }
+    }
+  };
     
+  const pickImage = async () => {
+    let granted = getCameraPermissions();
+    if (granted) {
+     let result = await ImagePicker.launchImageLibraryAsync(imageConfig);
+     if (!result.cancelled) {
+       setImage(result.uri);
+     } 
+    }
+  };
     const onChangeText = (text) => setNote(text);
     const onEndEditing = () => {
         if (note.length > 0) {
             AsyncStorage.setItem(detail.Key, note);
         }
-    };
+  };
+  const openImageModal = () => setVisible(true);
+  const closeImageModal = () => setVisible(false);
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar
-          backgroundColor="#0090ffc2"
-          barStyle="light-content" />
+        <StatusBar backgroundColor="#0090ffc2" barStyle="light-content" />
         <View style={styles.topHalfScreen}>
           <BackButton onPress={() => navigation.goBack()} />
           <View style={styles.bold}>
@@ -130,42 +171,24 @@ function DetailWeatherScreen({ navigation, detail }) {
             <View style={styles.buttonContainer}>
               <CameraButton onPress={getCameraPermissions} />
               <CameraRoll />
-                    </View>
-                    <View>
-                        {image ? (<TouchableOpacity
-                            onPress={showImageModal}>
-                            <View style={styles.pin}>
-                                <Pin />
-                                <Text>Put Coordinates here</Text>
-                            </View>
-                        </TouchableOpacity>)
-                            : null}
-                    </View>        
-        </View>
+            </View>
+            <View>
+              {image ? (
+                <TouchableOpacity onPress={openImageModal}>
+                  <View style={styles.pin}>
+                    <Pin />
+                    <Text>{`Lat: ${location.coords.latitude}, 
+                            Lon: ${location.coords.longitude}`}</Text>
+                  </View>
+                </TouchableOpacity>
+              ) : null}
+            </View>
+          </View>
         </ScrollView>
-        <Modal style={{ flex: 1 }} visible={isVisible}>
-          <Camera
-            style={styles.camera}
-            onCameraReady={signalCameraReady}
-            flashMode="auto"
-            autoFocus={Camera.Constants.AutoFocus.on}
-            onMountError={signalCameraError}
-            ref={camera}
-          >
-            {isLoading ? (
-              <ActivityIndicator
-                color="#0090ffc2"
-                size="small"
-                style={{ margin: 5 }}
-              />
-            ) : (
-                <CameraTrigger
-                  onPress={takePhoto} style={{ margin: 5 }} />
-            )}
-          </Camera>
-            </Modal>
-        {
-          image.uri && <ImageModal visible={imageModal} uri={image.uri} />}
+        {image && <ImageModal
+          visible={imageModal}
+          onRequestClose={closeImageModal}
+          uri={image} />}
       </View>
     );
 }

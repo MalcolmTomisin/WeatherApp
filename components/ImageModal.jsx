@@ -8,6 +8,8 @@ export default function ImageModal(props) {
         <Modal
             visible={props.visible}
             transparent
+            onRequestClose={props.onRequestClose}
+            onDismiss={props.onDismiss}
             animationType="slide"
             style={{
                 justifyContent: 'center',
