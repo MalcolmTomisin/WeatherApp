@@ -29,7 +29,11 @@ function CitiesWeatherScreen({ weatherList, navigation }) {
     const [input, setInput] = useState("");
     const [data, setData] = useState(false);
     const [error, setError] = useState(null);
-    const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  
+  const closeUserWeather = () => {
+    setIsVisible(false);
+  };
 
     useEffect(() => {
         (async () => {
@@ -88,7 +92,9 @@ function CitiesWeatherScreen({ weatherList, navigation }) {
         />
         {data && <UserWeather
           data={data}
-          visible={isVisible} />}
+          visible={isVisible}
+          onRequestClose={closeUserWeather}
+        />}
       </View>
     );
 }

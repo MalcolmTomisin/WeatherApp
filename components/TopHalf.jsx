@@ -12,16 +12,18 @@ import WeatherIcons, {
 } from "./Icons";
 import { Text } from './Text';
 
-export default function UserWeather({data, visible}) {
+export default function UserWeather({data, visible, onRequestClose}) {
   return (
     <Modal
       style={{ flex: 1 }}
-      visible={visible}>
+      visible={visible}
+      onRequestClose={onRequestClose}    
+    >
       <StatusBar
         backgroundColor="#333333cc"
         barStyle="light-content" />
       <View style={styles.topHalfScreen}>
-        <BackButton />
+        <BackButton onPress={onRequestClose} />
         <View style={styles.bold}>
           <Text style={styles.boldText}>{data.name}</Text>
           <WeatherIcons
