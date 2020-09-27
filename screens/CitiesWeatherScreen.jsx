@@ -41,9 +41,7 @@ function CitiesWeatherScreen({ weatherList, navigation }) {
             if (status !== "granted") {
               Alert.alert(REJECTED_PERMISSION_PROMPT);
             } else {
-             let location = await Location.getCurrentPositionAsync({
-               accuracy: Location.Accuracy.High,
-             });
+             let location = await Location.getCurrentPositionAsync({});
              fetch(
                `${OPEN_WEATHER_URL}lat=${location.coords.latitude}&lon=${location.coords.longitude}&units=metric&appid=${API_KEY_OPENWEATHERMAP}`
              )

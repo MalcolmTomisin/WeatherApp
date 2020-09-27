@@ -28,10 +28,10 @@ export const boundGetWeatherDetails = (list) => store.dispatch(getWeatherDetails
 export const boundFilterCities = (city) => store.dispatch(filterCities(city));
 export const boundSetDetailScreen = (index) => store.dispatch(setDetailScreen(index));
 export const boundRemoveFromList = (index) => {
-    StorageUtil(removedIndex, index);  
+    //StorageUtil(removedIndex, index);  
     store.dispatch(removeFromList(index));
 };
-export const boundAddToFavourites = async (index) => {
-    let numOfFavs = await StorageUtil(favouriteIndex, index);
-    store.dispatch(addToFavourites(index, numOfFavs));
+export const boundAddToFavourites = (index) => {
+    //let numOfFavs = await StorageUtil(favouriteIndex, index);
+    store.dispatch(addToFavourites(index));
 };

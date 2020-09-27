@@ -34,9 +34,9 @@ function DetailWeatherScreen({ navigation, detail }) {
     const [permission, askForPermission] = Permissions.usePermissions([Permissions.CAMERA, Permissions.CAMERA_ROLL], {
       ask: true,
     });
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
   const [visible, setVisible] = useState(false);
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState({});
     const [permissionDenied, setPermissionDenied] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const imageConfig = {
@@ -59,14 +59,17 @@ function DetailWeatherScreen({ navigation, detail }) {
               let text = await AsyncStorage.getItem(detail.Key);
               AsyncStorage.multiGet([detail.Key, "coordinates", "image"],
                 (err, stores) => {
+                  console.log('store', stores);
                   stores.map((result, i, store) => {
-                    if (i === 0) {
-                      setNote(result);
-                    } else if (i === 1) {
-                      setLocation(JSON.parse(result));
+                    if (i === 0 && result[1]) {
+                      setNote(result[1]);
+                    } else if (i === 1 && result[1]) {
+                      setLocation(result[1]);
                     }
                     else {
-                      setImage(result);
+                      if (result[1]) {
+                        setImage(result[1]);
+                      }
                     }
                   });
                 });
@@ -91,24 +94,32 @@ function DetailWeatherScreen({ navigation, detail }) {
   const takePhoto = async () => {
     let granted = getCameraPermissions();
     if (granted) {
-      let result = ImagePicker.launchCameraAsync(imageConfig);
+      let dir;
+      try {
+        dir = await FileSystem.getInfoAsync(
+          FileSystem.documentDirectory + "weather/"
+        );
+      } catch (e) {
+        
+      }
+      if (!dir.isDirectory) {
+       await FileSystem.makeDirectoryAsync(
+         FileSystem.documentDirectory + "weather/"
+       ); 
+      }
+      let location = await Location.getCurrentPositionAsync();
+      const imageName = `${Date.now()}`;
+      let result = await ImagePicker.launchCameraAsync(imageConfig);
       if (!result.cancelled) {
         setImage(result.uri);
-        let location = await Location.getCurrentPositionAsync({
-          accuracy: Location.Accuracy.High,
-        });
-        const imageName = `${new Date().now()}`;
         setLocation(location);
-        await FileSystem.makeDirectoryAsync(
-          FileSystem.documentDirectory + "images/"
-        );
         await FileSystem.copyAsync({
           from: result.uri,
-          to: FileSystem.documentDirectory + `images/${imageName}.png`
+          to: FileSystem.documentDirectory + `weather/${imageName}.png`
         });
         AsyncStorage.multiSet([
           ["coordinates", JSON.stringify(location)],
-          ["image", FileSystem.documentDirectory + `images/${imageName}.png`],
+          ["image", FileSystem.documentDirectory + `weather/${imageName}.png`],
         ]);
       }
     }
@@ -169,7 +180,7 @@ function DetailWeatherScreen({ navigation, detail }) {
               style={styles.noteArea}
             />
             <View style={styles.buttonContainer}>
-              <CameraButton onPress={getCameraPermissions} />
+              <CameraButton onPress={takePhoto} />
               <CameraRoll />
             </View>
             <View>
@@ -177,18 +188,22 @@ function DetailWeatherScreen({ navigation, detail }) {
                 <TouchableOpacity onPress={openImageModal}>
                   <View style={styles.pin}>
                     <Pin />
-                    <Text>{`Lat: ${location.coords.latitude}, 
-                            Lon: ${location.coords.longitude}`}</Text>
+                    {typeof location.coords !== 'undefined' && 
+                      <Text>{`Lat: ${location.coords.latitude}, Lon: ${location.coords.longitude}`}</Text>
+                    }
                   </View>
                 </TouchableOpacity>
               ) : null}
             </View>
           </View>
         </ScrollView>
-        {image && <ImageModal
-          visible={imageModal}
-          onRequestClose={closeImageModal}
-          uri={image} />}
+        {typeof image === 'string' && (
+          <ImageModal
+            visible={visible}
+            onRequestClose={closeImageModal}
+            uri={image}
+          />
+        )}
       </View>
     );
 }

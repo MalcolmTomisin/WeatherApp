@@ -33,18 +33,30 @@ export function weatherStateReducer(state = [], action) {
             /* case for adding cities to favourites and sorting alphabetically  */
             
             //already a fav
-            if (typeof state[action.index].favorite !== 'undefined') {
+            if (state[action.index].favorite) {
                 return state;
             }
+            let basin = [];
             let favState = state.splice(action.index, 1);
             favState[0].favorite = true;
-            if (action.numberOfFavs === 1) {
+            let intermediateState = [...state].reverse();
+            for (let i = 0; i < state.length; i++) {
+              if (state[i].favorite) {
+                basin.push(intermediateState.pop());
+                }
+              else {
+                  break;
+                }
+            }
+            if (basin.length === 0) {
                 state.unshift(...favState);
                 return state;
             }
-            let topFavs = state.splice(0, action.numberOfFavs - 1);
-            state.unshift(...[...topFavs, ...favState].sort(SortCities));
-            return state;
+            else {
+                let topFavs = state.splice(0, basin.length);
+                state.unshift(...[...topFavs, ...favState].sort(SortCities));
+                return state;
+            }
         default:
             return state;
     }
@@ -57,6 +69,10 @@ export function CitiesDetailIndex(state = 0, action) {
         default:
             return state;
     }
+}
+
+export function FavouritesReducer(state = [], action) {
+    switch(action.type){}
 }
 
 const GlobalState = combineReducers({

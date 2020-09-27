@@ -10,6 +10,7 @@ import {
   boundAddToFavourites
 } from '../redux/store';
 import ToolTip from './ToolTip';
+import ic_star from '../assets/icons/star.png';
 
 
 export default function ListItem(props) {
@@ -48,22 +49,28 @@ export default function ListItem(props) {
             style={{ width: 50, height: 50 }}
           />
         </View>
-        <View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
           <Text
             style={[styles.text, { textAlign: "center" }]}
           >{`${item.Temperature.Metric.Value}°C`}</Text>
+          {item.favorite && (
+            <Image source={ic_star} style={{ width: 50, height: 50 }} />
+          )}
         </View>
-        
-        {longPress && itemIndex === index ? 
-          (<ToolTip
+
+        {longPress && itemIndex === index ? (
+          <ToolTip
             index={index}
             addToFav={add}
             removeFromList={remove}
             style={styles.toolTip}
-          />)
-          :
-      null    
-      }
+          />
+        ) : null}
       </Pressable>
     </View>
   );
