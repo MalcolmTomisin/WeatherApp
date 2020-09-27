@@ -57,22 +57,23 @@ function DetailWeatherScreen({ navigation, detail }) {
         }
             try {
               let text = await AsyncStorage.getItem(detail.Key);
-              AsyncStorage.multiGet([detail.Key, "coordinates", "image"],
+              AsyncStorage.multiGet(
+                [detail.Key, `coordinates${detail.Key}`, `image${detail.Key}`],
                 (err, stores) => {
-                  console.log('store', stores);
+                  console.log("store", stores);
                   stores.map((result, i, store) => {
                     if (i === 0 && result[1]) {
                       setNote(result[1]);
                     } else if (i === 1 && result[1]) {
-                      setLocation(result[1]);
-                    }
-                    else {
+                      setLocation(JSON.parse(result[1]));
+                    } else {
                       if (result[1]) {
                         setImage(result[1]);
                       }
                     }
                   });
-                });
+                }
+              );
             }
             catch (e) {
                 //handle error
@@ -118,8 +119,8 @@ function DetailWeatherScreen({ navigation, detail }) {
           to: FileSystem.documentDirectory + `weather/${imageName}.png`
         });
         AsyncStorage.multiSet([
-          ["coordinates", JSON.stringify(location)],
-          ["image", FileSystem.documentDirectory + `weather/${imageName}.png`],
+          [`coordinates${detail.Key}`, JSON.stringify(location)],
+          [`image${detail.Key}`, FileSystem.documentDirectory + `weather/${imageName}.png`],
         ]);
       }
     }
@@ -180,10 +181,10 @@ function DetailWeatherScreen({ navigation, detail }) {
               style={styles.noteArea}
             />
             <View style={styles.buttonContainer}>
-              <CameraButton onPress={takePhoto} />
+              <CameraTrigger onPress={takePhoto} />
               <CameraRoll />
             </View>
-            <View>
+            <View style={{paddingVertical: 15}}>
               {image ? (
                 <TouchableOpacity onPress={openImageModal}>
                   <View style={styles.pin}>
@@ -202,6 +203,8 @@ function DetailWeatherScreen({ navigation, detail }) {
             visible={visible}
             onRequestClose={closeImageModal}
             uri={image}
+            longitude={location.coords.longitude}
+            latitude={location.coords.latitude}
           />
         )}
       </View>
@@ -265,7 +268,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderRadius: 5,
     width: Layout.DEVICE_WIDTH * 0.8,
-    marginVertical: 5,
+    marginHorizontal: 15,
   },
   weatherDetailContainer: {
     flexDirection: "row",

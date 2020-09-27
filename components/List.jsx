@@ -23,7 +23,7 @@ export default function ListItem(props) {
     setLongPress(false);
   };
 
-  const remove = (remove) => {
+  const remove = (index) => {
     boundRemoveFromList(index);
     setLongPress(false);
   };
@@ -38,6 +38,7 @@ export default function ListItem(props) {
           setItemIndex(index);
         }}
         onPress={() => {
+          setLongPress(false);
           boundSetDetailScreen(index);
           props.navigation.navigate("Details");
         }}
@@ -53,13 +54,17 @@ export default function ListItem(props) {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
+            paddingHorizontal: 10,
           }}
         >
           <Text
             style={[styles.text, { textAlign: "center" }]}
           >{`${item.Temperature.Metric.Value}°C`}</Text>
           {item.favorite && (
-            <Image source={ic_star} style={{ width: 50, height: 50 }} />
+            <Image source={ic_star}
+              style={{
+                width: 25, height: 25, marginRight: 10
+              }} />
           )}
         </View>
 
@@ -116,6 +121,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
+    paddingHorizontal: 10
   },
 });

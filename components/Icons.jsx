@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity, StyleSheet } from "react-native";
 import ic_humidity from '../assets/icons/ic_humidity.png';
 import ic_wind from '../assets/icons/ic_wind.png';
 import ic_back from "../assets/icons/ic_back.png";
@@ -53,7 +53,8 @@ export function CameraButton(props) {
 
 export function CameraRoll(props) {
     return (
-      <TouchableOpacity onPress={props.onPress}>
+      <TouchableOpacity onPress={props.onPress}
+        style={styles.button}>
         <Image
           source={ic_roll}
           style={[{ width: 40, height: 40 }, props.style]}
@@ -64,7 +65,10 @@ export function CameraRoll(props) {
 
 export function CameraTrigger(props) {
     return (
-      <TouchableOpacity onPress={props.onPress}>
+      <TouchableOpacity
+        onPress={props.onPress}
+        style={styles.button}
+      >
         <Image
           source={ic_take_photo}
           style={[{ width: 40, height: 40 }, props.style]}
@@ -80,3 +84,15 @@ export function Pin(props) {
         />
     );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    width: 100,
+    height: 55,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    padding: 10,
+  },
+});

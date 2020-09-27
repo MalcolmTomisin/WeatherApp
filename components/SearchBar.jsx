@@ -20,5 +20,8 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 50,
         backgroundColor: 'white',
+        // position: 'absolute',
+        // top: 15,
+        // left: 5
     },
 });

@@ -20,6 +20,8 @@ export default function ImageModal(props) {
           style={{
             justifyContent: "center",
             alignItems: "center",
+            backgroundColor: "#333333cc",
+            flex: 1,
           }}
         >
           <Image
@@ -29,6 +31,16 @@ export default function ImageModal(props) {
               height: Layout.DEVICE_WIDTH * 1.064,
             }}
           />
+          {typeof props.latitude !== "undefined" && (
+            <Text
+              style={{
+                fontSize: 16,
+                            color: "white",
+                            textAlign: 'center',
+                marginVertical: 10
+              }}
+            >{`Latitude: ${props.latitude}, Longitude: ${props.longitude}`}</Text>
+          )}
         </View>
       </Modal>
     );
