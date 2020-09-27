@@ -4,7 +4,8 @@ import {
     SET_INDEX_OF_DETAILSCREEN,
     REMOVE_FROM_LIST,
     ADD_TO_FAVOURITES,
-    MY_WEATHER
+    MY_WEATHER,
+    REMOVE_FROM_FAVORITE
 } from './actions';
 import SortCities from '../util/SortCities';
 
@@ -58,6 +59,29 @@ export function weatherStateReducer(state = [], action) {
                 state.unshift(...[...topFavs, ...favState].sort(SortCities));
                 return state;
             }
+        case REMOVE_FROM_FAVORITE:
+            if (!state[action.index].favorite) {
+                return state;
+            }
+            basin = [];
+            let unFavState = state.splice(action.index, 1);
+            unFavState[0].favorite = false;
+            intermediateState = [...state].reverse();
+            for (let i = 0; i < intermediateState.length; i++){
+                if (!intermediateState[i].favorite) {
+                    basin.push(state.pop());
+                } else {
+                    break;
+                }
+            }
+            if (basin.length === 0) {
+                state.push(...unFavState);
+                return state;
+            }
+            else {
+                return state.concat([...basin, ...unFavState].sort(SortCities));
+            }
+
         default:
             return state;
     }

@@ -7,7 +7,8 @@ import SearchBar from './SearchBar';
 import {
   boundSetDetailScreen,
   boundRemoveFromList,
-  boundAddToFavourites
+  boundAddToFavourites,
+  boundRemoveFromFavorites
 } from '../redux/store';
 import ToolTip from './ToolTip';
 import ic_star from '../assets/icons/star.png';
@@ -20,6 +21,11 @@ export default function ListItem(props) {
 
   const add = (index) => {
     boundAddToFavourites(index);
+    setLongPress(false);
+  };
+
+  const removeFromFav = (index) => {
+    boundRemoveFromFavorites(index);
     setLongPress(false);
   };
 
@@ -73,7 +79,9 @@ export default function ListItem(props) {
             index={index}
             addToFav={add}
             removeFromList={remove}
+            fav={item.favorite}
             style={styles.toolTip}
+            removeFromFav={removeFromFav}
           />
         ) : null}
       </Pressable>

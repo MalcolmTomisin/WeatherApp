@@ -7,7 +7,8 @@ import {
     setDetailScreen,
     removeFromList,
     addToFavourites,
-    getMyWeather
+    getMyWeather,
+    removeFromFavorite
 } from './actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import { removedIndex, favouriteIndex } from '../constants/Strings';
@@ -38,3 +39,4 @@ export const boundAddToFavourites = (index) => {
 };
 
 export const boundGetMyWeather = weather => store.dispatch(getMyWeather(weather));
+export const boundRemoveFromFavorites = index => store.dispatch(removeFromFavorite(index));

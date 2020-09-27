@@ -24,7 +24,9 @@ export default function UserWeather({data, visible, onRequestClose}) {
         <View style={styles.topHalfScreen}>
           <BackButton onPress={onRequestClose} />
           <View style={styles.bold}>
-            <Text style={styles.boldText}>{data.name}</Text>
+            <Text style={styles.boldText} fontFamily="lato-semibold">
+              {data.name}
+            </Text>
 
             <WeatherIcons
               style={{ height: 72, width: 72 }}
@@ -33,22 +35,28 @@ export default function UserWeather({data, visible, onRequestClose}) {
           </View>
           <View style={styles.weatherDetailsContainer}>
             <View>
-              <Text style={styles.temperature}>{`${Math.round(
-                data.main.temp
-              )}°C`}</Text>
-              <Text style={styles.seaLevel}>{`Feels like ${Math.round(
-                data.main.feels_like
-              )}°C`}</Text>
+              <Text
+                style={styles.temperature}
+                fontFamily="lato-bold"
+              >{`${Math.round(data.main.temp)}°C`}</Text>
+              <Text
+                fontFamily="lato-regular"
+                style={styles.seaLevel}
+              >{`Feels like ${Math.round(data.main.feels_like)}°C`}</Text>
             </View>
             <View style={styles.weatherDetails}>
               <HumidityIcon />
-              <Text style={styles.seaLevel}>{`${data.main.humidity}%`}</Text>
+              <Text
+                fontFamily="lato-regular"
+                style={styles.seaLevel}
+              >{`${data.main.humidity}%`}</Text>
             </View>
             <View style={styles.windIconContainer}>
               <WindIcon />
-              <Text style={styles.seaLevel}>{`${Math.round(
-                data.wind.speed
-              )} m/s`}</Text>
+              <Text
+                fontFamily="lato-regular"
+                style={styles.seaLevel}
+              >{`${Math.round(data.wind.speed)} m/s`}</Text>
             </View>
           </View>
         </View>
@@ -57,20 +65,40 @@ export default function UserWeather({data, visible, onRequestClose}) {
         <View>
           <View style={styles.listContainer}>
             <View style={styles.listItems}>
-              <Text style={styles.item}>Cloud Coverage</Text>
-              <Text style={styles.item}>{`${data.clouds.all}`}</Text>
+              <Text fontFamily="lato-medium" style={styles.item}>
+                Cloud Coverage
+              </Text>
+              <Text
+                fontFamily="lato-medium"
+                style={styles.item}
+              >{`${data.clouds.all}%`}</Text>
             </View>
             <View style={styles.listItems}>
-              <Text style={styles.item}>Sunrise</Text>
-              <Text style={styles.item}>{`${data.sys.sunrise}`}</Text>
+              <Text fontFamily="lato-medium" style={styles.item}>
+                Visibility
+              </Text>
+              <Text
+                fontFamily="lato-medium"
+                style={styles.item}
+              >{`${data.visibility} m`}</Text>
             </View>
             <View style={styles.listItems}>
-              <Text style={styles.item}>Sunset</Text>
-              <Text style={styles.item}>{`${data.sys.sunset}`}</Text>
+              <Text fontFamily="lato-medium" style={styles.item}>
+                Weather Summary
+              </Text>
+              <Text
+                fontFamily="lato-medium"
+                style={styles.item}
+              >{`${data.weather[0].description}`}</Text>
             </View>
             <View style={styles.listItems}>
-              <Text style={styles.item}>Pressure</Text>
-              <Text style={styles.item}>{`${data.main.pressure}`}</Text>
+              <Text fontFamily="lato-medium" style={styles.item}>
+                Pressure
+              </Text>
+              <Text
+                fontFamily="lato-medium"
+                style={styles.item}
+              >{`${data.main.pressure} hPa`}</Text>
             </View>
           </View>
         </View>
@@ -94,7 +122,6 @@ const styles = StyleSheet.create({
   },
   boldText: {
     color: "#ffffff",
-    //fontFamily: "SF UI Display",
     fontSize: 28,
     fontWeight: "700",
   },
@@ -115,13 +142,14 @@ const styles = StyleSheet.create({
   },
   listItems: {
     flexDirection: "row",
-    padding: 5,
+    padding: 15,
     justifyContent: "space-between",
     alignItems: "center",
+    width: Layout.DEVICE_WIDTH,
   },
   item: {
     textAlign: "center",
-    fontSize: 14,
+    fontSize: 16,
     color: "grey",
   },
   listContainer: {
