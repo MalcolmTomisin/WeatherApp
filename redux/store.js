@@ -1,12 +1,13 @@
 import { createStore } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
-import GlobalState,{ weatherStateReducer } from './reducers';
+import GlobalState from './reducers';
 import {
     getWeatherDetails,
     filterCities,
     setDetailScreen,
     removeFromList,
-    addToFavourites
+    addToFavourites,
+    getMyWeather
 } from './actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import { removedIndex, favouriteIndex } from '../constants/Strings';
@@ -35,3 +36,5 @@ export const boundAddToFavourites = (index) => {
     //let numOfFavs = await StorageUtil(favouriteIndex, index);
     store.dispatch(addToFavourites(index));
 };
+
+export const boundGetMyWeather = weather => store.dispatch(getMyWeather(weather));

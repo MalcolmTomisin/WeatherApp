@@ -3,6 +3,7 @@ export const FILTER_CITY = 'FILTER CITY';
 export const SET_INDEX_OF_DETAILSCREEN = 'INDEX';
 export const REMOVE_FROM_LIST = 'REMOVE_INDEX';
 export const ADD_TO_FAVOURITES = 'ADD_TO_FAVS';
+export const MY_WEATHER = 'MY WEATHER';
 
 export function getWeatherDetails(item) {
     return {
@@ -37,5 +38,12 @@ export function addToFavourites(index) {
         type: ADD_TO_FAVOURITES,
         index,
         favorite: true,
+    };
+}
+
+export function getMyWeather(item) {
+    return {
+        type: MY_WEATHER,
+        item,
     };
 }

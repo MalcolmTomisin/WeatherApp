@@ -17,71 +17,64 @@ export default function UserWeather({data, visible, onRequestClose}) {
     <Modal
       style={{ flex: 1 }}
       visible={visible}
-      onRequestClose={onRequestClose}    
+      onRequestClose={onRequestClose}
     >
-      <StatusBar
-        backgroundColor="#333333cc"
-        barStyle="light-content" />
-      <View style={styles.topHalfScreen}>
-        <BackButton onPress={onRequestClose} />
-        <View style={styles.bold}>
-          <Text style={styles.boldText}>{data.name}</Text>
-          <WeatherIcons
-            style={{ height: 72, width: 72 }}
-            uri={`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`}
-          />
-        </View>
-        <View
-          style={styles.weatherDetailsContainer}
-        >
-          <View>
-            <Text
-              style={styles.temperature}>{`${Math.round(
-              data.main.temp
-            )}°C`}</Text>
-            <Text
-              style={styles.seaLevel}>{`Feels like ${Math.round(
-              data.main.feels_like
-            )}°C`}</Text>
+      <StatusBar backgroundColor="#333333cc" barStyle="light-content" />
+      {data.name && (
+        <View style={styles.topHalfScreen}>
+          <BackButton onPress={onRequestClose} />
+          <View style={styles.bold}>
+            <Text style={styles.boldText}>{data.name}</Text>
+
+            <WeatherIcons
+              style={{ height: 72, width: 72 }}
+              uri={`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`}
+            />
           </View>
-          <View
-            style={styles.weatherDetails}
-          >
-            <HumidityIcon />
-            <Text
-              style={styles.seaLevel}>{`${data.main.humidity}%`}</Text>
-          </View>
-          <View
-            style={styles.windIconContainer}>
-            <WindIcon />
-            <Text style={styles.seaLevel}>{`${Math.round(
-              data.wind.speed
-            )} m/s`}</Text>
+          <View style={styles.weatherDetailsContainer}>
+            <View>
+              <Text style={styles.temperature}>{`${Math.round(
+                data.main.temp
+              )}°C`}</Text>
+              <Text style={styles.seaLevel}>{`Feels like ${Math.round(
+                data.main.feels_like
+              )}°C`}</Text>
+            </View>
+            <View style={styles.weatherDetails}>
+              <HumidityIcon />
+              <Text style={styles.seaLevel}>{`${data.main.humidity}%`}</Text>
+            </View>
+            <View style={styles.windIconContainer}>
+              <WindIcon />
+              <Text style={styles.seaLevel}>{`${Math.round(
+                data.wind.speed
+              )} m/s`}</Text>
+            </View>
           </View>
         </View>
-      </View>
-      <View>
-        <View
-          style={styles.listContainer}
-        >
-          <View style={styles.listItems}>
-            <Text style={styles.item}>Cloud Coverage</Text>
-            <Text style={styles.item}>{`${data.clouds.all}`}</Text>
-          </View>
-          <View style={styles.listItems}>
-            <Text style={styles.item}>Sunrise</Text>
-            <Text style={styles.item}>{`${data.sys.sunrise}`}</Text>
-          </View>
-          <View style={styles.listItems}>
-            <Text style={styles.item}>Sunset</Text>
-            <Text style={styles.item}>{`${data.sys.sunset}`}</Text>
-          </View>
-          <View style={styles.listItems}>
-            <Text style={styles.item}>Pressure</Text>
-            <Text style={styles.item}>{`${data.main.pressure}`}</Text>
+      )}
+      {data.sys && (
+        <View>
+          <View style={styles.listContainer}>
+            <View style={styles.listItems}>
+              <Text style={styles.item}>Cloud Coverage</Text>
+              <Text style={styles.item}>{`${data.clouds.all}`}</Text>
+            </View>
+            <View style={styles.listItems}>
+              <Text style={styles.item}>Sunrise</Text>
+              <Text style={styles.item}>{`${data.sys.sunrise}`}</Text>
+            </View>
+            <View style={styles.listItems}>
+              <Text style={styles.item}>Sunset</Text>
+              <Text style={styles.item}>{`${data.sys.sunset}`}</Text>
+            </View>
+            <View style={styles.listItems}>
+              <Text style={styles.item}>Pressure</Text>
+              <Text style={styles.item}>{`${data.main.pressure}`}</Text>
+            </View>
           </View>
         </View>
-      </View>
+      )}
     </Modal>
   );
 }

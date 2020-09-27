@@ -4,6 +4,7 @@ import {
     SET_INDEX_OF_DETAILSCREEN,
     REMOVE_FROM_LIST,
     ADD_TO_FAVOURITES,
+    MY_WEATHER
 } from './actions';
 import SortCities from '../util/SortCities';
 
@@ -71,12 +72,20 @@ export function CitiesDetailIndex(state = 0, action) {
     }
 }
 
-export function FavouritesReducer(state = [], action) {
-    switch(action.type){}
+const INITIAL_STATE = {};
+export function myWeatherReducer(state = INITIAL_STATE, action) {
+    switch (action.type) {
+        case MY_WEATHER:
+            console.log('state', action.item);
+            return action.item;
+        default:
+            return state;
+    }
 }
 
 const GlobalState = combineReducers({
-    weatherStateReducer, CitiesDetailIndex
+    weatherStateReducer, CitiesDetailIndex,
+    myWeatherReducer
 });
 
 export default GlobalState;

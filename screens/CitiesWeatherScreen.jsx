@@ -14,7 +14,8 @@ import {
 import WEATHER_URL from '../constants/Strings'; 
 import {
   boundGetWeatherDetails,
-  boundFilterCities
+  boundFilterCities,
+  boundGetMyWeather
 } from '../redux/store';
 import { connect } from "react-redux";
 import * as Location from "expo-location";
@@ -24,10 +25,9 @@ import {
 } from '../constants/Strings';
 import { API_KEY_OPENWEATHERMAP } from '../constants/ApiKey';
 
-function CitiesWeatherScreen({ weatherList, navigation }) {
+function CitiesWeatherScreen({ weatherList, navigation, myWeather }) {
      
     const [input, setInput] = useState("");
-    const [data, setData] = useState(false);
     const [error, setError] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   
@@ -47,7 +47,8 @@ function CitiesWeatherScreen({ weatherList, navigation }) {
              )
                .then((res) => res.json())
                .then((res) => {
-                 setData(res);
+                 //console.log('res', res);
+                 boundGetMyWeather(res);
                  setIsVisible(true);
                  //console.log("result", res);
                })
@@ -88,8 +89,8 @@ function CitiesWeatherScreen({ weatherList, navigation }) {
           value={input}
           navigation={navigation}
         />
-        {data && <UserWeather
-          data={data}
+        {myWeather && <UserWeather
+          data={myWeather}
           visible={isVisible}
           onRequestClose={closeUserWeather}
         />}
@@ -105,12 +106,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({weatherStateReducer}) => {
-  //console.log("state", state);
-  return { weatherList: weatherStateReducer };
+const mapStateToProps = ({weatherStateReducer, myWeatherReducer}) => {
+  //console.log("state", myWeatherReducer);
+  return {
+    weatherList: weatherStateReducer,
+    myWeather: myWeatherReducer
+  };
 };
 
 export default connect(mapStateToProps, {
-    boundGetWeatherDetails,boundFilterCities
+    boundGetWeatherDetails,boundFilterCities, boundGetMyWeather
 })(CitiesWeatherScreen);
 

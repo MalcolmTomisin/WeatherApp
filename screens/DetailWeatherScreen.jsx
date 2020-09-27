@@ -187,7 +187,7 @@ function DetailWeatherScreen({ navigation, detail }) {
             >{`${Math.round(detail.Temperature.Metric.Value)}°C`}</Text>
             <Text
               style={styles.seaLevel}
-            >{`${detail.GeoPosition.Elevation.Metric.Value} m`}</Text>
+            >{`${Math.round(detail.GeoPosition.Elevation.Metric.Value)} m`}</Text>
             <Text style={styles.seaLevel}>{`${detail.WeatherText}`}</Text>
           </View>
         </View>
