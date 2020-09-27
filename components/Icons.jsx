@@ -9,10 +9,10 @@ import ic_take_photo from '../assets/icons/ic_take_picture.png';
 import ic_pin from '../assets/icons/ic_pin.png';
 
 export default function WeatherIcons(props) {
-    return <Image
+    return (<Image
         style={props.style}
         source={{ uri: props.uri }}
-    />;
+    />);
 }
 
 export function HumidityIcon() {
