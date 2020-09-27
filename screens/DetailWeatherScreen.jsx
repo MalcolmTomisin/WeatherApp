@@ -129,9 +129,29 @@ function DetailWeatherScreen({ navigation, detail }) {
   const pickImage = async () => {
     let granted = getCameraPermissions();
     if (granted) {
+      let dir;
+      try {
+        dir = await FileSystem.getInfoAsync(
+          FileSystem.documentDirectory + "weather/"
+        );
+      } catch (e) {}
+      if (!dir.isDirectory) {
+        await FileSystem.makeDirectoryAsync(
+          FileSystem.documentDirectory + "weather/"
+        );
+      }
      let result = await ImagePicker.launchImageLibraryAsync(imageConfig);
-     if (!result.cancelled) {
-       setImage(result.uri);
+      if (!result.cancelled) {
+       const imageName = `${Date.now()}`;
+        setImage(result.uri);
+        await FileSystem.copyAsync({
+          from: result.uri,
+          to: FileSystem.documentDirectory + `weather/${imageName}.png`,
+        });
+        AsyncStorage.setItem(
+          `image${detail.Key}`,
+          FileSystem.documentDirectory + `weather/${imageName}.png`
+        );
      } 
     }
   };
@@ -164,7 +184,7 @@ function DetailWeatherScreen({ navigation, detail }) {
           >
             <Text
               style={styles.temperature}
-            >{`${detail.Temperature.Metric.Value}°C`}</Text>
+            >{`${Math.round(detail.Temperature.Metric.Value)}°C`}</Text>
             <Text
               style={styles.seaLevel}
             >{`${detail.GeoPosition.Elevation.Metric.Value} m`}</Text>
@@ -182,7 +202,7 @@ function DetailWeatherScreen({ navigation, detail }) {
             />
             <View style={styles.buttonContainer}>
               <CameraTrigger onPress={takePhoto} />
-              <CameraRoll />
+              <CameraRoll onPress={pickImage} />
             </View>
             <View style={{paddingVertical: 15}}>
               {image ? (
@@ -203,8 +223,11 @@ function DetailWeatherScreen({ navigation, detail }) {
             visible={visible}
             onRequestClose={closeImageModal}
             uri={image}
-            longitude={location.coords.longitude}
-            latitude={location.coords.latitude}
+            longitude={typeof location.coords !== 'undefined' ?
+              location.coords.longitude : ''}
+            latitude={typeof location.coords !== 'undefined' ?
+              location.coords.latitude : ''
+          }
           />
         )}
       </View>

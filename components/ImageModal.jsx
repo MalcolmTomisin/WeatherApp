@@ -31,7 +31,7 @@ export default function ImageModal(props) {
               height: Layout.DEVICE_WIDTH * 1.064,
             }}
           />
-          {typeof props.latitude !== "undefined" && (
+          {props.latitude !== "" && (
             <Text
               style={{
                 fontSize: 16,
