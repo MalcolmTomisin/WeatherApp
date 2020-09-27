@@ -169,7 +169,9 @@ function DetailWeatherScreen({ navigation, detail }) {
         <View style={styles.topHalfScreen}>
           <BackButton onPress={() => navigation.goBack()} />
           <View style={styles.bold}>
-            <Text style={styles.boldText}>{detail.LocalizedName}</Text>
+            <Text fontFamily="lato-bold" style={styles.boldText}>
+              {detail.LocalizedName}
+            </Text>
             <WeatherIcons
               style={{ height: 72, width: 72 }}
               uri={`https://developer.accuweather.com/sites/default/files/${detail.WeatherIcon}-s.png`}
@@ -183,12 +185,19 @@ function DetailWeatherScreen({ navigation, detail }) {
             }}
           >
             <Text
+              fontFamily="lato-medium"
               style={styles.temperature}
             >{`${Math.round(detail.Temperature.Metric.Value)}°C`}</Text>
             <Text
+              fontFamily="lato-regular"
               style={styles.seaLevel}
-            >{`${Math.round(detail.GeoPosition.Elevation.Metric.Value)} m`}</Text>
-            <Text style={styles.seaLevel}>{`${detail.WeatherText}`}</Text>
+            >{`${Math.round(
+              detail.GeoPosition.Elevation.Metric.Value
+            )} m`}</Text>
+            <Text
+              fontFamily="lato-regular"
+              style={styles.seaLevel}
+            >{`${detail.WeatherText}`}</Text>
           </View>
         </View>
         <ScrollView>
@@ -204,30 +213,39 @@ function DetailWeatherScreen({ navigation, detail }) {
               <CameraTrigger onPress={takePhoto} />
               <CameraRoll onPress={pickImage} />
             </View>
-            <View style={{paddingVertical: 15}}>
+            <View style={{ paddingVertical: 15 }}>
               {image ? (
-                <TouchableOpacity onPress={openImageModal}>
+                <TouchableOpacity
+                  accessible={true}
+                  accessibilityLabel="open image"
+                  accessibilityHint="open image modal"
+                  onPress={openImageModal}>
                   <View style={styles.pin}>
                     <Pin />
-                    {typeof location.coords !== 'undefined' && 
+                    {typeof location.coords !== "undefined" && (
                       <Text>{`Lat: ${location.coords.latitude}, Lon: ${location.coords.longitude}`}</Text>
-                    }
+                    )}
                   </View>
                 </TouchableOpacity>
               ) : null}
             </View>
           </View>
         </ScrollView>
-        {typeof image === 'string' && (
+        {typeof image === "string" && (
           <ImageModal
             visible={visible}
             onRequestClose={closeImageModal}
             uri={image}
-            longitude={typeof location.coords !== 'undefined' ?
-              location.coords.longitude : ''}
-            latitude={typeof location.coords !== 'undefined' ?
-              location.coords.latitude : ''
-          }
+            longitude={
+              typeof location.coords !== "undefined"
+                ? location.coords.longitude
+                : ""
+            }
+            latitude={
+              typeof location.coords !== "undefined"
+                ? location.coords.latitude
+                : ""
+            }
           />
         )}
       </View>
@@ -261,7 +279,6 @@ const styles = StyleSheet.create({
   back: {},
   boldText: {
     color: "#ffffff",
-    //fontFamily: "SF UI Display",
     fontSize: 28,
     fontWeight: "700",
   },

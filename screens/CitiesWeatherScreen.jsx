@@ -109,6 +109,7 @@ function CitiesWeatherScreen({ weatherList, navigation, myWeather }) {
       <View style={styles.container}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
         <ListItem
+          importantForAccessibilty="yes"
           data={weatherList}
           onChangeText={recieveInput}
           value={input}
@@ -117,6 +118,7 @@ function CitiesWeatherScreen({ weatherList, navigation, myWeather }) {
         />
         {myWeather && (
           <UserWeather
+            importantForAccessibilty="auto"
             data={myWeather}
             visible={isVisible}
             onRequestClose={closeUserWeather}
@@ -124,6 +126,7 @@ function CitiesWeatherScreen({ weatherList, navigation, myWeather }) {
         )}
         {searchData && (
           <UserWeather
+            importantForAccessibilty="auto"
             data={searchData}
             visible={isVisible2}
             onRequestClose={closeUserWeather2}

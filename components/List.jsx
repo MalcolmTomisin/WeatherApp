@@ -37,6 +37,9 @@ export default function ListItem(props) {
   const _renderItem = ({ item, index }) => (
     <View>
       <Pressable
+        accessible="true"
+        accessibilityLabel="Tap or press me down"
+        accessibilityHint={`Navigates to the weather information screen on ${item.LocalizedName} or hold to add Weather of ${item.LocalizedName} to favorites or remove`}
         key={item.Key}
         style={styles.item}
         onLongPress={() => {
@@ -50,7 +53,9 @@ export default function ListItem(props) {
         }}
       >
         <View style={styles.iconContainer}>
-          <Text style={styles.text}>{item.LocalizedName}</Text>
+          <Text fontFamily="lato-bold" style={styles.text}>
+            {item.LocalizedName}
+          </Text>
           <Icons
             uri={`https://developer.accuweather.com/sites/default/files/${item.WeatherIcon}-s.png`}
             style={{ width: 50, height: 50 }}
@@ -64,13 +69,18 @@ export default function ListItem(props) {
           }}
         >
           <Text
+            fontFamily="lato-medium"
             style={[styles.text, { textAlign: "center" }]}
-          >{`${item.Temperature.Metric.Value}°C`}</Text>
+          >{`${Math.round(item.Temperature.Metric.Value)}°C`}</Text>
           {item.favorite && (
-            <Image source={ic_star}
+            <Image
+              source={ic_star}
               style={{
-                width: 25, height: 25, marginRight: 10
-              }} />
+                width: 25,
+                height: 25,
+                marginRight: 10,
+              }}
+            />
           )}
         </View>
 
@@ -111,7 +121,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#ffffff",
-    // fontFamily: "SF UI Display",
     fontSize: 22,
   },
   toolTip: {

@@ -8,7 +8,9 @@ export default function SearchBar(props) {
             value={props.value}
             onSubmitEditing={props.onSubmitEditing}
             style={styles.searchBar}
-
+            accessibile={true}
+            accessibilityLabel="Search"
+            accessibilityHint="Search weather of a city"
         />
     );
 }

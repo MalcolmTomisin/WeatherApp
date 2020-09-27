@@ -31,7 +31,11 @@ export function WindIcon() {
 
 export function BackButton(props) {
     return (
-      <TouchableOpacity onPress={props.onPress}>
+      <TouchableOpacity
+        accessible={true}
+        accessibilityLabel="back"
+        accessibilityHint="go back to previous screen"
+        onPress={props.onPress}>
         <Image
           source={ic_back}
           style={[{ width: 25, height: 20 }, props.style]}
@@ -42,7 +46,11 @@ export function BackButton(props) {
 
 export function CameraButton(props) {
     return (
-        <TouchableOpacity onPress={props.onPress}>
+      <TouchableOpacity
+        accessible={true}
+        accessibilityHint="Launch Camera App to take Photo"
+        accessibilityLabel="Camera"
+        onPress={props.onPress}>
             <Image
                 source={ic_camera}
                 style={[{ width: 40, height: 40 }, props.style]}
@@ -53,8 +61,13 @@ export function CameraButton(props) {
 
 export function CameraRoll(props) {
     return (
-      <TouchableOpacity onPress={props.onPress}
-        style={styles.button}>
+      <TouchableOpacity
+        onPress={props.onPress}
+        accessible={true}
+        accessibilityHint="Launch Camera Roll to select photo"
+        accessibilityLabel="Camera Roll"
+        style={styles.button}
+      >
         <Image
           source={ic_roll}
           style={[{ width: 40, height: 40 }, props.style]}
@@ -68,6 +81,9 @@ export function CameraTrigger(props) {
       <TouchableOpacity
         onPress={props.onPress}
         style={styles.button}
+        accessible={true}
+        accessibilityHint="Launch Camera Roll to select photo"
+        accessibilityLabel="Camera Roll"
       >
         <Image
           source={ic_take_photo}
