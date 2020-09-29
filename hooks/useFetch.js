@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import WEATHER_URL from '../constants/Strings';
 import { boundGetWeatherDetails } from "../redux/store";
 import { Image } from 'react-native';
+import SortCities from '../util/SortCities';
 
 export function useFetch(url, param = null) {
     const [result, setResult] = useState([]);
@@ -15,26 +16,7 @@ export function useFetch(url, param = null) {
                 .then(res => {
                     if (url === WEATHER_URL && Array.isArray(res)) {
                         let newArr = res.splice(0, 15);
-                        newArr.sort((a, b) => {
-                            let localizedNameA = a.LocalizedName.toUpperCase();
-                            let localizedNameB = b.LocalizedName.toUpperCase();
-                            //take opportunity and prefetch image here
-                            Image.prefetch(
-                              `https://developer.accuweather.com/sites/default/files/${a.WeatherIcon}-s.png`
-                            );
-                            Image.prefetch(
-                              `https://developer.accuweather.com/sites/default/files/${b.WeatherIcon}-s.png`
-                            );
-                            if (localizedNameA < localizedNameB) {
-                                return -1;
-                            }
-                            if (localizedNameA > localizedNameB) {
-                                return 1;
-                            }
-
-                            // names must be equal
-                            return 0;
-                        });
+                        newArr.sort(SortCities);
                         boundGetWeatherDetails(newArr); 
                         return;   
                     } 

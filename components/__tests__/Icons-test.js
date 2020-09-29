@@ -1,5 +1,5 @@
 import * as React from "react";
-import renderer from "react-test-renderer";
+import {render} from '@testing-library/react-native';
 import WeatherIcons,{CameraTrigger} from "../Icons";
 
 jest.mock("react-native", () => {
@@ -10,8 +10,9 @@ jest.mock("react-native", () => {
   };
 });
 
-it(`renders correctly`, () => {
-  const tree = renderer.create(<CameraTrigger style={{}} uri="" />).toJSON();
-
-  expect(tree).toMatchSnapshot();
+describe("Icon component", () => {
+  it("renders correctly", () => {
+    const wrapper = render(<WeatherIcons />);
+    expect(wrapper).toMatchSnapshot();
+  });
 });

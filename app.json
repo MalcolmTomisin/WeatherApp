@@ -17,14 +17,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.weather.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-     "android": {
+    "android": {
       "package": "com.test.app",
       "versionCode": 1
-    }
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }

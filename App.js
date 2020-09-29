@@ -1,6 +1,6 @@
 import React from 'react';
 import {ActivityIndicator} from 'react-native';
-import Navigation from './navigation';
+import Navigation from './navigation/index';
 import { Provider } from "react-redux";
 import store, { persistor } from './redux/store';
 import useCachedResources from "./hooks/useCachedResources";
