@@ -6,8 +6,8 @@
 
 ### Design
 
-> A Model View Presenter design was used
-
+> A [Model View Presenter](https://drive.google.com/file/d/12_woC_iMTR3wm-wYSHWrsl6GpXDa8QoO/view?usp=sharing) design was used
+ 
 
 
 ## Testing
@@ -18,7 +18,7 @@ Getting Jest to make snapshot tests of components went horribly wrong on depende
 Redux reducers and actions were unit tested for consistency on UI updates
 
 ## Screenshots
-
+[Here!](https://drive.google.com/drive/folders/1QAOaiZuGGxnE_tT5Bp6KoPHWyNr_1nmL?usp=sharing)
 
 
 
