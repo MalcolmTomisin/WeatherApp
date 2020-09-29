@@ -2,7 +2,7 @@
 
 ## Weather APIs used
 
-> Getting all 15 individual most populous cities weather data on basic and standard plans were not avaialable on the major weather services so I found Accuweather's top 50 cities API and used OpenWeatherMap's API to get weather data for location and search requirements
+> Getting all 15 individual most populous cities weather data on basic and standard plans were not avaialable on the major weather services so I found Accuweather's top 50 cities current weather API and used OpenWeatherMap's Current Weather API to get weather data for location and search requirements
 
 ### Design
 
