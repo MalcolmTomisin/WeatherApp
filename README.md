@@ -13,7 +13,7 @@
 ## Testing
 
 **issues**
-Getting Jest to make snapshot tests of components went horribly wrong on dependency issues
+Getting Jest to make snapshot tests of components went horribly wrong on dependency issues, something like this [issue on stackoverflow](http://52.65.140.135:8080/)
 
 Redux reducers and actions were unit tested for consistency on UI updates
 
