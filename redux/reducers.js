@@ -11,11 +11,15 @@ import SortCities from '../util/SortCities';
 
 import { combineReducers } from "redux";
 
+
+//reducer for the top 15 weather city list, hydrates state, adds/removes favorite flag to items-
+// in array, removes items from list
 export function weatherStateReducer(state = [], action) {
     switch (action.type) {
         case WEATHER_OF_CITIES:
             return [ ...action.item];
         case FILTER_CITY:
+            // unused case, intended to filter cities for searcg
             let lowerCity = action.city.toLowerCase();
             let newState = state.filter(item => {
                 return item.LocalizedName.toLowerCase().match(lowerCity);
@@ -60,10 +64,14 @@ export function weatherStateReducer(state = [], action) {
                 return state;
             }
         case REMOVE_FROM_FAVORITE:
+            //if item is already not a favorite
             if (!state[action.index].favorite) {
                 return state;
             }
+            //collects items that aren't favorite to assemble them alphabetically
             basin = [];
+
+            // index of item to be 'unfavorited'
             let unFavState = state.splice(action.index, 1);
             unFavState[0].favorite = false;
             intermediateState = [...state].reverse();
@@ -87,6 +95,7 @@ export function weatherStateReducer(state = [], action) {
     }
 }
 
+// state that controls what item is dispalyed in detailscreen
 export function CitiesDetailIndex(state = 0, action) {
     switch (action.type) {
         case SET_INDEX_OF_DETAILSCREEN:
@@ -95,6 +104,8 @@ export function CitiesDetailIndex(state = 0, action) {
             return state;
     }
 }
+
+//state managing single weather api calls
 
 const INITIAL_STATE = {};
 export function myWeatherReducer(state = INITIAL_STATE, action) {
